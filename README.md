@@ -28,6 +28,14 @@ Actionsの `firmware` には `torabo-chan-paw3222-usb-logging.uf2` も含まれ�
 通常版と同じキー・センサー設定に、ZMK公式の `zmk-usb-logging` snippetを追加しています。
 ZMK v0.3.0の既定DEBUGレベル（4）を利用します。
 
+ログ版は2秒ごとに `torabo_diag` の状態も表示します（`usb-diag-v1`）。
+`spi_ready` / `paw_ready` / `kscan_ready` が1なら、各デバイスの初期化は成功しています。
+`paw_ready=0` ならセンサー初期化に失敗しています。1でも光学的な追従まで保証しません。
+`motion_active=1` はMOTION端子のLowを意味します。負数はGPIO読み取りエラーです。
+`row_sample` は共通行の瞬間値で、キー番号や押下の確定結果ではありません。
+診断処理はGPIOを読むだけで、キースキャンやSPIのピン設定・コールバックは変更しません。
+通常版・設定リセット版にはこの診断処理を含めません。
+
 1. Windowsのデバイスマネージャー → ポート（COMとLPT）で、XIAO接続時に現れるCOM番号を確認します。
 2. シリアル端末でそのCOMポートを開きます。設定は **115200 bps / 8 bit / パリティなし / 1 stop bit / フロー制御なし**、DTRは有効にします。
 3. 端末のログ保存を開始し、5キーをそれぞれ押してからボールを上下左右に動かします。

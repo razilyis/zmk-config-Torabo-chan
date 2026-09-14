@@ -1,0 +1,4 @@
+config TORABO_DIAGNOSTICS
+    bool "Periodic Torabo hardware initialization diagnostics"
+    default n
+    depends on ZMK_USB_LOGGING

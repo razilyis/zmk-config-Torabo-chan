@@ -1,0 +1,4 @@
+name: torabo-diagnostics
+build:
+  cmake: diagnostics
+  kconfig: diagnostics/Kconfig

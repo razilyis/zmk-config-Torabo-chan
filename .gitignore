@@ -1,7 +1,8 @@
 .west/
 build/
 build-*/
-zephyr/
+zephyr/*
+!zephyr/module.yml
 modules/
 tools/
 bootloader/
