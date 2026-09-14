@@ -1,0 +1,9 @@
+file_format: "1"
+id: torabo_chan
+name: Torabo-chan
+type: shield
+url: https://github.com/razilyis/zmk-driver-paw3222
+requires: [seeed_xiao]
+features:
+  - keys
+  - pointer

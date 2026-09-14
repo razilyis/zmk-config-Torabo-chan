@@ -1,0 +1,6 @@
+if SHIELD_TORABO_CHAN
+
+config ZMK_KEYBOARD_NAME
+    default "Torabo-chan"
+
+endif

@@ -1,0 +1,2 @@
+config SHIELD_TORABO_CHAN
+    def_bool $(shields_list_contains,torabo_chan)

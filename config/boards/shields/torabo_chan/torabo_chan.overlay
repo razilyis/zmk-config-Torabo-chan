@@ -1,0 +1,78 @@
+#include <dt-bindings/zmk/matrix_transform.h>
+#include <zephyr/dt-bindings/gpio/gpio.h>
+#include <zephyr/dt-bindings/pinctrl/nrf-pinctrl.h>
+
+/ {
+    chosen {
+        zmk,kscan = &kscan0;
+        zmk,matrix-transform = &default_transform;
+    };
+
+    // Keymap order is SW1, SW2, SW3, SW4, SW5, despite the U-shaped layout.
+    default_transform: keymap_transform {
+        compatible = "zmk,matrix-transform";
+        rows = <1>;
+        columns = <5>;
+        map = <RC(0,0) RC(0,1) RC(0,2) RC(0,3) RC(0,4)>;
+    };
+
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        wakeup-source;
+        diode-direction = "col2row";
+        // All five diode cathodes connect to Row0 = XIAO D1.
+        row-gpios = <&gpio0 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+        col-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>, // SW1: D10 / Col0
+                    <&gpio1 14 GPIO_ACTIVE_HIGH>, // SW2: D9  / Col1
+                    <&gpio1 13 GPIO_ACTIVE_HIGH>, // SW3: D8  / Col2
+                    <&gpio1 12 GPIO_ACTIVE_HIGH>, // SW4: D7  / Col3
+                    <&gpio0 29 GPIO_ACTIVE_HIGH>; // SW5: D3  / Col4
+    };
+
+    trackball_listener: trackball_listener {
+        compatible = "zmk,input-listener";
+        device = <&trackball>;
+    };
+};
+
+// D4/D5 are used by the sensor, D6/D7 and D8..D10 by CS/the matrix.
+&i2c0 { status = "disabled"; };
+&uart0 { status = "disabled"; };
+&spi2 { status = "disabled"; };
+
+&pinctrl {
+    torabo_spi0_default: torabo_spi0_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
+        };
+    };
+    torabo_spi0_sleep: torabo_spi0_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi0 {
+    status = "okay";
+    compatible = "nordic,nrf-spim";
+    pinctrl-0 = <&torabo_spi0_default>;
+    pinctrl-1 = <&torabo_spi0_sleep>;
+    pinctrl-names = "default", "sleep";
+    cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>; // XIAO D6
+
+    trackball: trackball@0 {
+        compatible = "pixart,paw3222";
+        reg = <0>;
+        status = "okay";
+        spi-max-frequency = <2000000>;
+        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; // D0
+        // Driver resolution steps are 38 CPI; 32 * 38 = 1216.
+        res-cpi = <1216>;
+    };
+};

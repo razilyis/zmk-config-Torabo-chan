@@ -1,0 +1,61 @@
+{
+  "result": "PASS",
+  "checks": [
+    "YAML syntax",
+    "west manifest schema and selected driver revision",
+    "XIAO GPIOs vs KiCad pads",
+    "SW1..SW5 column order and all five diode directions",
+    "all six FFC pin nets",
+    "SPI pinctrl active/sleep",
+    "keymap behavior and processor labels in ZMK v0.3.0",
+    "build matrix targets"
+  ],
+  "compiled": false,
+  "hardware_tested": false,
+  "gpio_nets": {
+    "MOTION": [
+      0,
+      2
+    ],
+    "Row0": [
+      0,
+      3
+    ],
+    "Row1": [
+      0,
+      28
+    ],
+    "Col4": [
+      0,
+      29
+    ],
+    "SDIO": [
+      0,
+      4
+    ],
+    "SCLK": [
+      0,
+      5
+    ],
+    "CS": [
+      1,
+      11
+    ],
+    "Col3": [
+      1,
+      12
+    ],
+    "Col2": [
+      1,
+      13
+    ],
+    "Col1": [
+      1,
+      14
+    ],
+    "Col0": [
+      1,
+      15
+    ]
+  }
+}

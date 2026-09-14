@@ -1,0 +1,7 @@
+include:
+  - board: seeeduino_xiao_ble
+    shield: torabo_chan
+    artifact-name: torabo-chan-paw3222
+  - board: seeeduino_xiao_ble
+    shield: settings_reset
+    artifact-name: torabo-chan-settings-reset

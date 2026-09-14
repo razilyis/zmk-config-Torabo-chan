@@ -1,0 +1,12 @@
+.west/
+build/
+build-*/
+zephyr/
+modules/
+tools/
+bootloader/
+zmk/
+*.uf2
+*.bin
+*.hex
+__pycache__/

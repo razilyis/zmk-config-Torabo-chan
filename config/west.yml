@@ -1,0 +1,16 @@
+manifest:
+  remotes:
+    - name: zmkfirmware
+      url-base: https://github.com/zmkfirmware
+    - name: razilyis
+      url-base: https://github.com/razilyis
+  projects:
+    - name: zmk
+      remote: zmkfirmware
+      revision: v0.3.0
+      import: app/west.yml
+    - name: zmk-driver-paw3222
+      remote: razilyis
+      revision: 2260e4756af61c35cac7fd47d29dfc20d9837675
+  self:
+    path: config
