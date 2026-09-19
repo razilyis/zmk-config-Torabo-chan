@@ -5,10 +5,12 @@
 
 #define BASE 0
 #define SCROLL 1
-#define BALL_TRANSFORM 0
+// Mounted PAW3222: right reports +Y, down reports -X.
+// Swap first, then invert output Y: (x, y) -> (y, -x).
+#define BALL_TRANSFORM (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)
 
 &trackball_listener {
-    // Set INPUT_TRANSFORM_XY_SWAP / X_INVERT / Y_INVERT after a hardware test.
+    // Use the same mounting correction for pointer motion and ball scrolling.
     input-processors = <&zip_xy_transform BALL_TRANSFORM>;
     scroll {
         layers = <SCROLL>;

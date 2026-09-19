@@ -19,7 +19,9 @@ PMW3610 用ではありません。ZMK Studio / DYA Studio は今回の構成に
 
 ローカルでは設定の静的検証とKiCad基板のピン照合を行っています。
 通常版の初回ビルド（コミット `d4c02c2`）はGitHub Actionsで成功しました。
-以降のコンパイル結果は各Actionsの実行結果を確認してください。センサーの実機動作は未確認です。
+以降のコンパイル結果は各Actionsの実行結果を確認してください。
+実機でのポインター移動は確認済みです。2026-09-19に実機の取り付け方向に合わせた軸補正を追加しました。
+補正後の方向・スクロールは、新しいUF2を書き込んで確認してください。
 
 ## USBログ版
 
@@ -102,8 +104,11 @@ FFCの表裏・配線順は実装時に導通を確認してください。
   `config/boards/shields/torabo_chan/torabo_chan.overlay` の `res-cpi` で変更します。
   このドライバーの範囲は608～4826 CPI。38の倍数にしてください。
 - スクロール：移動量を1/16に変換。keymap の `zip_scroll_scaler 1 16` で調整します。
-- 軸の向き：実機未確認のため無変換が初期値です。
-  keymap の `BALL_TRANSFORM` を下の値に変更し、再ビルドします。
+- 軸の向き：**X/Y入れ替え＋変換後のY軸反転**を適用しています。
+  実機で「ボールを右へ動かすとカーソルが下、下へ動かすと左」になったため、
+  `(x, y) → (y, -x)` と補正し、右→右・下→下に合わせています。
+  keymap の `BALL_TRANSFORM` は `(INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)` です。
+  センサーの取り付け方向を変えた場合は、下表を参考に再調整・再ビルドします。
 
 | 補正 | BALL_TRANSFORM |
 |---|---|
@@ -112,8 +117,10 @@ FFCの表裏・配線順は実装時に導通を確認してください。
 | 上下反転 | `INPUT_TRANSFORM_Y_INVERT` |
 | X/Y入れ替え | `INPUT_TRANSFORM_XY_SWAP` |
 | X/Y入れ替え＋左右反転 | `(INPUT_TRANSFORM_XY_SWAP \| INPUT_TRANSFORM_X_INVERT)` |
+| X/Y入れ替え＋上下反転（現在の設定） | `(INPUT_TRANSFORM_XY_SWAP \| INPUT_TRANSFORM_Y_INVERT)` |
 
 この補正は通常移動とスクロールの両方に適用します。
+[ZMK公式のTransformer Input Processor](https://zmk.dev/docs/keymaps/input-processors/transformer)を使用しています。
 球・レンズ間隔やセンサーの組付け方向はファームウェアだけでは保証できません。
 
 ## 電源
