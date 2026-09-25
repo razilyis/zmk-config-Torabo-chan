@@ -1,0 +1,17 @@
+{
+  "id": "torabo_chan",
+  "name": "Torabo-chan",
+  "layouts": {
+    "default_transform": {
+      "name": "Torabo-chan (5 keys)",
+      "layout": [
+        { "label": "SW1", "row": 0, "col": 0, "x": 0, "y": 0 },
+        { "label": "SW2", "row": 1, "col": 0, "x": 0, "y": 1 },
+        { "label": "SW3", "row": 1, "col": 1, "x": 1, "y": 1 },
+        { "label": "SW4", "row": 1, "col": 2, "x": 2, "y": 1 },
+        { "label": "SW5", "row": 0, "col": 2, "x": 2, "y": 0 }
+      ]
+    }
+  },
+  "sensors": []
+}

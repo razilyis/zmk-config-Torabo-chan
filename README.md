@@ -77,6 +77,25 @@ SW3 の長押しはスクロール用なので、中央ボタンを押し続け�
 編集箇所は `config/torabo_chan.keymap`。
 bindings の順序は **SW1, SW2, SW3, SW4, SW5** です。
 
+## Keymap Editor
+
+`config/torabo_chan.json` が [Keymap Editor](https://nickcoutsos.github.io/keymap-editor/) 用の表示レイアウトです。
+GitHub連携でこのリポジトリの `config/torabo_chan.keymap` を開くと、次の配置で表示します。
+
+```text
+SW1       SW5
+SW2  SW3  SW4
+```
+
+上段中央の空きがトラックボールの位置です。ボールをキーとして追加する必要はありません。
+JSONの配列順はbindingsと同じ **SW1, SW2, SW3, SW4, SW5** に保ちます。
+`x` / `y` は表示座標、`row` / `col` はEditorの整形用の行・列で、GPIOの行・列とは別です。
+この形式は [Keymap Editorのレイアウト定義](https://github.com/nickcoutsos/keymap-editor/wiki/Defining-Keyboard-Layouts) に準拠しています。
+
+更新前の配置が表示される場合は、未保存の編集を保存してからEditorを再読み込みし、
+このリポジトリの `main` ブランチと `torabo_chan.keymap` を選び直してください。
+表示レイアウトだけの変更では、実機へのファームウェアの再書き込みは不要です。
+
 ## 基板ピン対応
 
 | ネット | XIAO | nRF52840 GPIO | 用途 |
