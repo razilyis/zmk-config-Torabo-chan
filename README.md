@@ -55,10 +55,13 @@ PC側でも古いペアリングを削除して接続し直します。通常版
 
 ## ボタン配置
 
+MCU側を手前にして使う向きです。
+
 ```text
-SW1 左クリック           SW5 右クリック
+SW4 進む   SW3 中央       SW2 戻る
          [14mm ball]
-SW2 戻る   SW3 中央       SW4 進む
+SW5 右クリック           SW1 左クリック
+          手前（MCU側）
 ```
 
 | スイッチ | 動作 |
@@ -83,11 +86,12 @@ bindings の順序は **SW1, SW2, SW3, SW4, SW5** です。
 GitHub連携でこのリポジトリの `config/torabo_chan.keymap` を開くと、次の配置で表示します。
 
 ```text
-SW1       SW5
-SW2  SW3  SW4
+SW4  SW3  SW2
+SW5       SW1
+  手前（MCU側）
 ```
 
-上段中央の空きがトラックボールの位置です。ボールをキーとして追加する必要はありません。
+下段中央の空きがトラックボールの位置です。ボールをキーとして追加する必要はありません。
 JSONの配列順はbindingsと同じ **SW1, SW2, SW3, SW4, SW5** に保ちます。
 `x` / `y` は表示座標、`row` / `col` はEditorの整形用の行・列で、GPIOの行・列とは別です。
 この形式は [Keymap Editorのレイアウト定義](https://github.com/nickcoutsos/keymap-editor/wiki/Defining-Keyboard-Layouts) に準拠しています。
