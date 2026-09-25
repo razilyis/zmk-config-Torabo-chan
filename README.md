@@ -94,6 +94,8 @@ SW5       SW1
 下段中央の空きがトラックボールの位置です。ボールをキーとして追加する必要はありません。
 JSONの配列順はbindingsと同じ **SW1, SW2, SW3, SW4, SW5** に保ちます。
 `x` / `y` は表示座標、`row` / `col` はEditorの整形用の行・列で、GPIOの行・列とは別です。
+`row` は全キー `0`、`col` は配列順に `0`〜`4` とします。画面上の位置は `x` / `y` だけで指定します。
+整形用の行・列を見た目に合わせて逆順にすると、Editorの連番検証でエラーになり、保存時のbindings順も保てません。
 この形式は [Keymap Editorのレイアウト定義](https://github.com/nickcoutsos/keymap-editor/wiki/Defining-Keyboard-Layouts) に準拠しています。
 
 更新前の配置が表示される場合は、未保存の編集を保存してからEditorを再読み込みし、
