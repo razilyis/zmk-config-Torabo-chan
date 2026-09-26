@@ -20,7 +20,7 @@ PMW3610 用ではありません。ZMK Studio / DYA Studio は今回の構成に
 ローカルでは設定の静的検証とKiCad基板のピン照合を行っています。
 通常版の初回ビルド（コミット `d4c02c2`）はGitHub Actionsで成功しました。
 以降のコンパイル結果は各Actionsの実行結果を確認してください。
-実機でのポインター移動は確認済みです。2026-09-19に実機の取り付け方向に合わせた軸補正を追加しました。
+実機でのポインター移動は確認済みです。2026-09-26にMCUを右側に置く使用方向へ軸補正を更新しました。
 補正後の方向・スクロールは、新しいUF2を書き込んで確認してください。
 
 ## USBログ版
@@ -55,26 +55,25 @@ PC側でも古いペアリングを削除して接続し直します。通常版
 
 ## ボタン配置
 
-MCU側を手前にして使う向きです。
+MCU側を右にして使う、右側が開いたC字配置です。
 
 ```text
-SW4 進む   SW3 中央       SW2 戻る
-         [14mm ball]
-SW5 右クリック           SW1 左クリック
-          手前（MCU側）
+SW2      SW1
+SW3    [14mm ball]   MCU側 →
+SW4      SW5
 ```
 
 | スイッチ | 動作 |
 |---|---|
 | SW1 | 左クリック（長押しでドラッグ） |
-| SW2 | マウス第4ボタン／戻る |
+| SW2 | 短押しでPage Down、長押しでレイヤー2 |
 | SW3 | 短押しで中央クリック、200ms以上長押しでボールスクロール |
-| SW4 | マウス第5ボタン／進む |
+| SW4 | 短押しでCtrl + Page Up、長押しでレイヤー1（スクロール） |
 | SW5 | 右クリック |
 
 SW3 を押して200ms待ち、そのままボールを動かすと縦・横スクロールします。
 押してから判定までの200msは通常のポインター移動です。
-戻る／進むの解釈はOS・アプリによります。
+レイヤー2ではSW1がリセット、SW5がブートローダーです。キー割り当てはGitHub側で編集された内容を維持しています。
 SW3 の長押しはスクロール用なので、中央ボタンを押し続ける操作には割り当てていません。
 
 編集箇所は `config/torabo_chan.keymap`。
@@ -86,12 +85,12 @@ bindings の順序は **SW1, SW2, SW3, SW4, SW5** です。
 GitHub連携でこのリポジトリの `config/torabo_chan.keymap` を開くと、次の配置で表示します。
 
 ```text
-SW4  SW3  SW2
-SW5       SW1
-  手前（MCU側）
+SW2  SW1
+SW3       MCU側 →
+SW4  SW5
 ```
 
-下段中央の空きがトラックボールの位置です。ボールをキーとして追加する必要はありません。
+中央右の空きがトラックボールの位置です。ボールをキーとして追加する必要はありません。
 JSONの配列順はbindingsと同じ **SW1, SW2, SW3, SW4, SW5** に保ちます。
 `x` / `y` は表示座標、`row` / `col` はEditorの整形用の行・列で、GPIOの行・列とは別です。
 `row` は全キー `0`、`col` は配列順に `0`〜`4` とします。画面上の位置は `x` / `y` だけで指定します。
@@ -129,20 +128,22 @@ FFCの表裏・配線順は実装時に導通を確認してください。
   `config/boards/shields/torabo_chan/torabo_chan.overlay` の `res-cpi` で変更します。
   このドライバーの範囲は608～4826 CPI。38の倍数にしてください。
 - スクロール：移動量を1/16に変換。keymap の `zip_scroll_scaler 1 16` で調整します。
-- 軸の向き：**X/Y入れ替え＋変換後のY軸反転**を適用しています。
-  実機で「ボールを右へ動かすとカーソルが下、下へ動かすと左」になったため、
-  `(x, y) → (y, -x)` と補正し、右→右・下→下に合わせています。
-  keymap の `BALL_TRANSFORM` は `(INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)` です。
-  センサーの取り付け方向を変えた場合は、下表を参考に再調整・再ビルドします。
+- 軸の向き：**X軸・Y軸の両方を反転**します（センサー入力 `(x, y) → (-x, -y)`）。
+  MCUを右側に置いたとき、従来のファームウェアでは「右→下、下→左」になったため、
+  従来のカーソル出力に `(x, y) → (y, -x)` を追加する計算で補正しています。
+  以前の「X/Y入れ替え＋Y反転」と合成した結果が、今回の「X/Y両軸反転」です。
+  keymap の `BALL_TRANSFORM` は `(INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)` です。
+  新しいUF2を書き込んで、通常移動とスクロールの向きを確認してください。
 
 | 補正 | BALL_TRANSFORM |
 |---|---|
+| X/Y両軸反転（現在の設定） | `(INPUT_TRANSFORM_X_INVERT \| INPUT_TRANSFORM_Y_INVERT)` |
 | なし | `0` |
 | 左右反転 | `INPUT_TRANSFORM_X_INVERT` |
 | 上下反転 | `INPUT_TRANSFORM_Y_INVERT` |
 | X/Y入れ替え | `INPUT_TRANSFORM_XY_SWAP` |
 | X/Y入れ替え＋左右反転 | `(INPUT_TRANSFORM_XY_SWAP \| INPUT_TRANSFORM_X_INVERT)` |
-| X/Y入れ替え＋上下反転（現在の設定） | `(INPUT_TRANSFORM_XY_SWAP \| INPUT_TRANSFORM_Y_INVERT)` |
+| X/Y入れ替え＋上下反転 | `(INPUT_TRANSFORM_XY_SWAP \| INPUT_TRANSFORM_Y_INVERT)` |
 
 この補正は通常移動とスクロールの両方に適用します。
 [ZMK公式のTransformer Input Processor](https://zmk.dev/docs/keymaps/input-processors/transformer)を使用しています。

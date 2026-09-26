@@ -6,10 +6,10 @@
 #define BASE 0
 #define SCROLL 1
 
-// Mounted PAW3222: right reports +Y, down reports -X.
-// Swap first, then invert output Y: (x, y) -> (y, -x).
+// MCU on the right: rotate the previous cursor output (x, y) -> (y, -x).
+// Composed with the previous swap + Y inversion, raw input becomes (-x, -y).
 
-#define BALL_TRANSFORM (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)
+#define BALL_TRANSFORM (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)
 
 &trackball_listener {
     // Use the same mounting correction for pointer motion and ball scrolling.
@@ -39,9 +39,10 @@
     keymap {
         compatible = "zmk,keymap";
 
-        // Physical layout:
-        // SW1             SW5
-        // SW2     SW3     SW4
+        // Physical layout (MCU on the right), bindings remain SW1..SW5:
+        // SW2  SW1
+        // SW3       MCU ->
+        // SW4  SW5
 
         base {
             bindings = <
