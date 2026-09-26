@@ -61,9 +61,9 @@ PC側でも古いペアリングを削除して接続し直します。通常版
 MCU側を右にして使う、右側が開いたC字配置です。
 
 ```text
-SW2      SW1
-SW3    [14mm ball]   MCU側 →
 SW4      SW5
+SW3    [14mm ball]   MCU側 →
+SW2      SW1
 ```
 
 | スイッチ | 動作 |
@@ -88,11 +88,12 @@ bindings の順序は **SW1, SW2, SW3, SW4, SW5** です。
 GitHub連携でこのリポジトリの `config/torabo_chan.keymap` を開くと、次の配置で表示します。
 
 ```text
-SW2  SW1
-SW3       MCU側 →
 SW4  SW5
+SW3       MCU側 →
+SW2  SW1
 ```
 
+2026-09-27：実機のキースキャンログと照合し、MCU右側での表示の上下反転を修正しました。
 中央右の空きがトラックボールの位置です。ボールをキーとして追加する必要はありません。
 JSONの配列順はbindingsと同じ **SW1, SW2, SW3, SW4, SW5** に保ちます。
 `x` / `y` は表示座標、`row` / `col` はEditorの整形用の行・列で、GPIOの行・列とは別です。

@@ -41,9 +41,9 @@
         compatible = "zmk,keymap";
 
         // Physical layout (MCU on the right), bindings remain SW1..SW5:
-        // SW2  SW1
-        // SW3       MCU ->
         // SW4  SW5
+        // SW3       MCU ->
+        // SW2  SW1
 
         base {
             bindings = <
