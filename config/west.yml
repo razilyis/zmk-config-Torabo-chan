@@ -12,5 +12,8 @@ manifest:
     - name: zmk-driver-paw3222
       remote: razilyis
       revision: 2260e4756af61c35cac7fd47d29dfc20d9837675
+    - name: zmk-driver-zw3021
+      remote: razilyis
+      revision: 66d9bb919357320c99e6cc1919a051fe14a382e3
   self:
     path: config

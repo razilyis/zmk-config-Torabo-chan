@@ -1,5 +1,8 @@
 # Torabo-chan — 5 keys + PAW3222
 
+ZW3021追加配線用の別ビルドを追加しています。[配線・ブラウザー設定の説明](docs/ZW3021.md)を参照してください。
+Keymap Editorで編集する5キーは共通で、指紋用の内部キーはビルド時に自動追加します。
+
 Seeed Studio XIAO nRF52840（ZMK v0.3.0 のボード名 `seeeduino_xiao_ble`）と、
 PAW3222 breakout 用の単体 USB / Bluetooth マウス設定です。
 分割キーボードの peripheral 設定ではありません。

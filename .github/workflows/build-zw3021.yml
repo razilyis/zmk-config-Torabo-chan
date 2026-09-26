@@ -1,0 +1,59 @@
+name: Build ZW3021 firmware
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: zmkfirmware/zmk-build-arm:stable
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare fingerprint keymap from current Keymap Editor source
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/prepare_zw3021.py config/torabo_chan.keymap /tmp/torabo-zw3021.keymap
+          mkdir -p /tmp/torabo-west/config
+          cp -R config/. /tmp/torabo-west/config/
+      - uses: actions/cache@v4
+        with:
+          path: |
+            /tmp/torabo-west/modules
+            /tmp/torabo-west/tools
+            /tmp/torabo-west/zephyr
+            /tmp/torabo-west/bootloader
+            /tmp/torabo-west/zmk
+          key: zw3021-${{ runner.os }}-${{ hashFiles('config/west.yml') }}
+      - name: Fetch pinned dependencies
+        working-directory: /tmp/torabo-west
+        run: |
+          west init -l config
+          west update --fetch-opt=--filter=tree:0
+          west zephyr-export
+      - name: Build PAW3222 and ZW3021 with USB browser configuration
+        working-directory: /tmp/torabo-west
+        run: |
+          west build -s zmk/app -d build -b seeeduino_xiao_ble -S zmk-usb-logging -- \
+            -DZMK_CONFIG=/tmp/torabo-west/config \
+            -DZMK_EXTRA_MODULES="$GITHUB_WORKSPACE" \
+            -DSHIELD="torabo_chan torabo_zw3021" \
+            -DKEYMAP_FILE=/tmp/torabo-zw3021.keymap
+      - name: Package firmware and matching browser UI
+        run: |
+          mkdir -p artifacts
+          cp /tmp/torabo-west/build/zephyr/zmk.uf2 artifacts/torabo-chan-paw3222-zw3021-usb.uf2
+          cp /tmp/torabo-west/zmk-driver-zw3021/docs/index.html artifacts/ZW3021-setup.html
+          cp docs/ZW3021.md artifacts/README-ZW3021.md
+          cp /tmp/torabo-west/zmk-driver-zw3021/LICENSE artifacts/LICENSE-ZW3021
+          cp /tmp/torabo-zw3021.keymap artifacts/generated.keymap.txt
+          cp /tmp/torabo-west/build/zephyr/.config artifacts/build.config.txt
+          cp /tmp/torabo-west/build/zephyr/zephyr.dts artifacts/build.dts.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: firmware-zw3021
+          path: artifacts/
