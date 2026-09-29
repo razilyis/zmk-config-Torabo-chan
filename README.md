@@ -128,7 +128,7 @@ FFCの表裏・配線順は実装時に導通を確認してください。
 
 ## 感度と向き
 
-- センサー解像度：1216 CPI（ドライバーの38 CPI刻み×32）。
+- センサー解像度：722 CPI（ドライバーの38 CPI刻み×19）。
   `config/boards/shields/torabo_chan/torabo_chan.overlay` の `res-cpi` で変更します。
   このドライバーの範囲は608～4826 CPI。38の倍数にしてください。
 - スクロール：移動量を1/16に変換。keymap の `zip_scroll_scaler 1 16` で調整します。

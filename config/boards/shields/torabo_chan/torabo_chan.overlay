@@ -72,7 +72,7 @@
         status = "okay";
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; // D0
-        // Driver resolution steps are 38 CPI; 32 * 38 = 1216.
-        res-cpi = <1216>;
+        // Driver resolution steps are 38 CPI; 19 * 38 = 722.
+        res-cpi = <722>;
     };
 };
